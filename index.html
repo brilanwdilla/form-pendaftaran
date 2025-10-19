@@ -9,12 +9,14 @@
   body {
     margin: 0;
     height: 100vh;
-    overflow: hidden;
-    background: url('anime-moon-landscape.jpg') no-repeat center center fixed;
-    background-size: cover;
+    overflow-x: hidden;
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: url('Anime-Moon-Landscape.JPG') no-repeat center center;
+    background-size: cover;
+    background-attachment: scroll; /* agar tampil di HP */
   }
 
+  /* Efek angin lembut */
   .wind-overlay {
     position: absolute;
     top: 0; left: 0;
@@ -119,7 +121,8 @@
     border-color: #2166d6;
   }
 
-  #musicControl {
+  /* Tombol musik */
+  #musicButton {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -127,15 +130,15 @@
     color: white;
     border: none;
     border-radius: 50%;
-    width: 48px;
-    height: 48px;
+    width: 55px;
+    height: 55px;
     font-size: 22px;
     cursor: pointer;
     z-index: 2;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
 
-  #musicControl:hover {
+  #musicButton:hover {
     background: rgba(30, 100, 220, 1);
   }
 
@@ -146,16 +149,19 @@
 </head>
 <body>
 
+<!-- Efek daun -->
 <canvas id="leaves"></canvas>
 <div class="wind-overlay"></div>
 
-<audio id="bgMusic" autoplay loop>
+<!-- Musik (tanpa autoplay, karena akan dikontrol tombol) -->
+<audio id="bgMusic" loop>
   <source src="Monolog.mp3" type="audio/mpeg">
 </audio>
 
-<button id="musicControl">🔊</button>
+<!-- Tombol kontrol musik -->
+<button id="musicButton" title="Putar musik">🎵</button>
 
-
+<!-- Formulir -->
 <div class="container">
   <h1>FORMULIR PENDAFTARAN MAHASISWA BARU</h1>
   <p class="subtitle">Tahun Akademik 2025/2026</p>
@@ -202,6 +208,9 @@
 </div>
 
 <script>
+// ============================
+// Efek daun 🍃
+// ============================
 const canvas = document.getElementById('leaves');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -241,21 +250,29 @@ function drawLeaves() {
 }
 drawLeaves();
 
-const bgMusic = document.getElementById("bgMusic");
-const btn = document.getElementById("musicControl");
-let playing = true;
+// ============================
+// Musik kontrol 🎧
+// ============================
+const music = document.getElementById("bgMusic");
+const button = document.getElementById("musicButton");
+let playing = false;
 
-btn.onclick = () => {
-  if (playing) {
-    bgMusic.pause();
-    btn.textContent = "🔈";
+button.addEventListener("click", () => {
+  if (!playing) {
+    music.play();
+    button.textContent = "⏸️";
+    button.title = "Hentikan musik";
   } else {
-    bgMusic.play();
-    btn.textContent = "🔊";
+    music.pause();
+    button.textContent = "🎵";
+    button.title = "Putar musik";
   }
   playing = !playing;
-};
+});
 
+// ============================
+// Form handler
+// ============================
 function handleSubmit(e){
   e.preventDefault();
   const f = e.target;
